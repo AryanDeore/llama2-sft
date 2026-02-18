@@ -146,6 +146,8 @@ CUSTOM_CSS = """
     color: #3b2f1e !important;
     margin-top: 6px !important;
     min-height: 300px !important;
+    overflow-y: auto !important;
+    max-height: 500px !important;
 }
 
 .story-output .block > label > span {
