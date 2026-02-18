@@ -10,13 +10,26 @@ Supports:
 """
 
 import argparse
+import os
 import time
 
 import torch
+from huggingface_hub import hf_hub_download
 from sentencepiece import SentencePieceProcessor
 
 from checkpoint import load_model
 from utils.formatting import format_instruction
+
+# HF repo that stores the tokenizer
+_TOKENIZER_REPO = os.environ.get("HF_REPO_ID", "0rn0/llama2-15m-tinystories-sft")
+
+
+def _get_tokenizer_path():
+    """Return local path to tokenizer.model, downloading from HF Hub if needed."""
+    local_path = "tokenizer.model"
+    if os.path.exists(local_path):
+        return local_path
+    return hf_hub_download(repo_id=_TOKENIZER_REPO, filename="tokenizer.model")
 
 
 def text_to_token_ids(text, tokenizer):
@@ -123,7 +136,7 @@ def generate_story(
         Generated story text
     """
     # Get tokenizer
-    sp = SentencePieceProcessor(model_file="tokenizer.model")
+    sp = SentencePieceProcessor(model_file=_get_tokenizer_path())
 
     # Format instruction prompt (without story)
     instruction_prompt = format_instruction(topic, ending)
