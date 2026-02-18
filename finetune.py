@@ -18,12 +18,11 @@ from models.llama2 import Transformer
 from utils.config import get_config
 
 
-def load_pretrained_model(device: str = "cpu", model_size: str = "15m") -> Transformer:
-    """Load pretrained model from HuggingFace Hub.
+def load_pretrained_model(device: str = "cpu") -> Transformer:
+    """Load pretrained Llama 2 15M model from HuggingFace Hub.
 
     Args:
         device: Device to load model on ("cpu" or "cuda")
-        model_size: Model size ("15m")
 
     Returns:
         Transformer instance with loaded weights
@@ -64,7 +63,7 @@ def compute_loss(model_output, labels, ignore_index: int = -100) -> torch.Tensor
 
 
 def train_epoch(
-    model: GPT2,
+    model: Transformer,
     train_loader,
     optimizer: AdamW,
     device: str,
@@ -116,7 +115,7 @@ def train_epoch(
 
 @torch.no_grad()
 def evaluate(
-    model: GPT2,
+    model: Transformer,
     val_loader,
     device: str,
 ) -> float:
@@ -153,7 +152,7 @@ def evaluate(
 
 
 def save_checkpoint(
-    model: GPT2, optimizer: AdamW, epoch: int, loss: float, checkpoint_dir: str
+    model: Transformer, optimizer: AdamW, epoch: int, loss: float, checkpoint_dir: str
 ):
     """Save model checkpoint.
 
@@ -173,20 +172,17 @@ def save_checkpoint(
 
 
 def main(
-    pretrained_checkpoint: Optional[str] = None,
-    batch_size: int = 8,
+    batch_size: int = 64,
     learning_rate: float = 5e-5,
     num_epochs: int = 2,
-    max_length: int = 512,
+    max_length: int = 256,
     checkpoint_dir: Optional[str] = None,
     device: Optional[str] = None,
     max_tokens: Optional[int] = None,
-    model_size: str = "30m",
 ):
-    """Main training script.
+    """Main training script for Llama 2 15M instruction fine-tuning.
 
     Args:
-        pretrained_checkpoint: Path to pretrained model checkpoint
         batch_size: Batch size for training
         learning_rate: Learning rate for optimizer
         num_epochs: Number of epochs to train
@@ -194,13 +190,10 @@ def main(
         checkpoint_dir: Directory to save checkpoints
         device: Device to train on ("cpu" or "cuda")
         max_tokens: Maximum tokens to train on (optional)
-        model_size: Model size to use ("30m" or "125m")
     """
-    # Set defaults based on model_size if not provided
-    if pretrained_checkpoint is None:
-        pretrained_checkpoint = f"checkpoints/pre_trained_gpt2-{model_size}/model_epoch_{'6' if model_size == '30m' else '3'}.pt"
+    # Set defaults
     if checkpoint_dir is None:
-        checkpoint_dir = f"checkpoints/sft_{model_size.upper()}_model"
+        checkpoint_dir = "checkpoints/sft_15M_model"
 
     # Setup
     if device is None:
@@ -224,7 +217,7 @@ def main(
     print("-" * 70)
 
     # Load model
-    model = load_pretrained_model(device=device, model_size=model_size)
+    model = load_pretrained_model(device=device)
 
     # Create dataloaders
     print("\nCreating dataloaders...")
@@ -265,7 +258,7 @@ def main(
     print("-" * 70)
 
     # Print model config
-    config = get_config("30m")
+    config = get_config("llama2-15m")
     print("\nModel Config:")
     for key, value in config.items():
         print(f"  {key}: {value}")
@@ -310,30 +303,19 @@ def main(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Fine-tune GPT-2 on instruction tasks")
-    parser.add_argument(
-        "--model-size",
-        choices=["30m", "125m"],
-        default="30m",
-        help="Model size to finetune (30m or 125m)",
-    )
-    parser.add_argument(
-        "--checkpoint",
-        default=None,
-        help="Path to pretrained model checkpoint (overrides --model-size)",
-    )
-    parser.add_argument("--batch-size", type=int, default=8, help="Batch size")
+    parser = argparse.ArgumentParser(description="Fine-tune Llama 2 15M on instruction tasks")
+    parser.add_argument("--batch-size", type=int, default=64, help="Batch size")
     parser.add_argument("--lr", type=float, default=5e-5, help="Learning rate")
     parser.add_argument("--epochs", type=int, default=2, help="Number of epochs")
     parser.add_argument(
-        "--max-length", type=int, default=512, help="Max sequence length"
+        "--max-length", type=int, default=256, help="Max sequence length"
     )
     parser.add_argument(
         "--checkpoint-dir",
         default=None,
-        help="Checkpoint directory (overrides --model-size)",
+        help="Checkpoint directory",
     )
-    parser.add_argument("--device", default=None, help="Device (cpu or cuda)")
+    parser.add_argument("--device", default=None, help="Device (cpu, cuda, or mps)")
     parser.add_argument(
         "--max-tokens",
         type=int,
@@ -344,7 +326,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(
-        pretrained_checkpoint=args.checkpoint,
         batch_size=args.batch_size,
         learning_rate=args.lr,
         num_epochs=args.epochs,
@@ -352,5 +333,4 @@ if __name__ == "__main__":
         checkpoint_dir=args.checkpoint_dir,
         device=args.device,
         max_tokens=args.max_tokens,
-        model_size=args.model_size,
     )
