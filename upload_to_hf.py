@@ -35,7 +35,7 @@ def upload_model(checkpoint_path, repo_id, model_card_path):
 if __name__ == "__main__":
     # Llama 2 15M SFT
     upload_model(
-        checkpoint_path="checkpoints/sft_15M_model/finetune_epoch_1.pt",
+        checkpoint_path="checkpoints/sft_15M_model/finetune_epoch_3.pt",
         repo_id="0rn0/llama2-15m-tinystories-sft",
         model_card_path="model_cards/llama2-15m-sft-README.md",
     )
