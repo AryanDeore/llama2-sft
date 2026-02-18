@@ -178,18 +178,47 @@ CUSTOM_CSS = """
     transform: translateY(0px) !important;
 }
 
+/* Generate button - reduce font weight */
+.gen-btn {
+    font-family: 'Baloo 2', cursive !important;
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;          /* was 700 */
+    border-radius: 12px !important;
+    margin-top: 24px !important;
+    padding: 10px 0 !important;
+    background: linear-gradient(135deg, #ff8c00, #e05c00) !important;
+    border: none !important;
+    box-shadow: 0 4px 10px rgba(224, 92, 0, 0.35) !important;
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+/* Reduce top padding inside both cards */
+.card-panel {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    padding: 16px 28px 28px 28px !important;   /* was 28px all around */
+    border: 1.5px solid #f0e6d3 !important;
+}
+
 
 /* Footer */
-/* Footer pinned to bottom */
-/* Footer */
 .footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     text-align: center;
-    padding: 180px 0 16px;
+    padding: 16px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
-    margin-top: auto;
+    border-top: 1px solid #f0e6d3;
+    background: white;
+    z-index: 100;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .footer a {
@@ -203,21 +232,43 @@ CUSTOM_CSS = """
     text-decoration: none;
 }
 
-.footer a:hover {
-    color: #d15f00;
-}
-
 .footer svg {
     width: 18px;
     height: 18px;
     fill: #888;
+    transition: fill 0.2s ease;
 }
 
-/* Make the gradio container full height so footer is pushed down */
+/* LinkedIn link */
+.footer a:nth-child(1):hover {
+    color: #0A66C2;
+}
+
+.footer a:nth-child(1):hover svg {
+    fill: #0A66C2;
+}
+
+/* Website link */
+.footer a:nth-child(2):hover {
+    color: #D4864A;
+}
+
+.footer a:nth-child(2):hover svg {
+    fill: #D4864A;
+}
+
+/* Gmail link */
+.footer a:nth-child(3):hover {
+    color: #EA4335;
+}
+
+.footer a:nth-child(3):hover svg {
+    fill: #EA4335;
+}
+
+/* Add padding to gradio container so content doesn't hide behind fixed footer */
 .gradio-container {
-    min-height: 100vh !important;
-    display: flex !important;
-    flex-direction: column !important;
+    padding-bottom: 100px !important;
 }
 """
 
@@ -226,7 +277,7 @@ with gr.Blocks(title="Tiny Tales Llama") as demo:
 
     gr.Markdown("<br>")
     gr.HTML("<h1 class='app-title'>Tiny Tales Llama</h1>")
-    gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned Llama 2 model.</p>")
+    gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned Llama 2 15M model.</p>")
     gr.HTML(
         "<div style='text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px;'>"
         "<a href='https://github.com/AryanDeore/Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Pre%20Training%20(GPT2)-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
