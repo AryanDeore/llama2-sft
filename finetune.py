@@ -179,6 +179,7 @@ def main(
     checkpoint_dir: Optional[str] = None,
     device: Optional[str] = None,
     max_tokens: Optional[int] = None,
+    resume_from: Optional[str] = None,
 ):
     """Main training script for Llama 2 15M instruction fine-tuning.
 
@@ -190,6 +191,7 @@ def main(
         checkpoint_dir: Directory to save checkpoints
         device: Device to train on ("cpu" or "cuda")
         max_tokens: Maximum tokens to train on (optional)
+        resume_from: Path to checkpoint to resume training from
     """
     # Set defaults
     if checkpoint_dir is None:
@@ -214,10 +216,31 @@ def main(
     print(f"Num epochs: {num_epochs}")
     print(f"Max length: {max_length}")
     print(f"Max tokens: {max_tokens if max_tokens is not None else 'All'}")
+    print(f"Resume from: {resume_from if resume_from else 'Training from scratch'}")
     print("-" * 70)
 
     # Load model
-    model = load_pretrained_model(device=device)
+    start_epoch = 1
+    if resume_from is not None:
+        # Load from checkpoint
+        print(f"\nResuming from checkpoint: {resume_from}")
+        checkpoint = torch.load(resume_from, map_location=device)
+
+        # Extract epoch number from checkpoint
+        if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+            state_dict = checkpoint["model_state_dict"]
+            start_epoch = checkpoint.get("epoch", 1) + 1
+            print(f"  Resuming from epoch {start_epoch} (previous best: {checkpoint.get('epoch', '?')})")
+        else:
+            # Assume checkpoint is just state_dict
+            state_dict = checkpoint if isinstance(checkpoint, dict) else checkpoint.state_dict()
+
+        # Load model and apply state dict
+        model = load_pretrained_model(device=device)
+        model.load_state_dict(state_dict)
+    else:
+        # Load from HF Hub
+        model = load_pretrained_model(device=device)
 
     # Create dataloaders
     print("\nCreating dataloaders...")
@@ -269,7 +292,7 @@ def main(
     best_val_loss = float("inf")
     start_time = time.time()
 
-    for epoch in range(1, num_epochs + 1):
+    for epoch in range(start_epoch, num_epochs + 1):
         print(f"\nEpoch {epoch}/{num_epochs}")
 
         # Train
@@ -322,6 +345,12 @@ if __name__ == "__main__":
         default=None,
         help="Maximum number of tokens to train on (useful for testing)",
     )
+    parser.add_argument(
+        "--resume-from",
+        type=str,
+        default=None,
+        help="Path to checkpoint to resume training from (e.g., checkpoints/sft_15M_model/finetune_epoch_2.pt)",
+    )
 
     args = parser.parse_args()
 
@@ -333,4 +362,5 @@ if __name__ == "__main__":
         checkpoint_dir=args.checkpoint_dir,
         device=args.device,
         max_tokens=args.max_tokens,
+        resume_from=args.resume_from,
     )
