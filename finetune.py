@@ -4,8 +4,10 @@ Fine-tunes a pretrained Llama 2 model on instruction-following tasks
 using the TinyStories instruction dataset with 50-50 happy/sad split.
 """
 
+import json
 import os
 import time
+from datetime import datetime
 from typing import Optional
 
 import torch
@@ -171,6 +173,46 @@ def save_checkpoint(
     print(f"✓ Saved checkpoint: {checkpoint_path}")
 
 
+def load_metrics_log(metrics_file: str) -> dict:
+    """Load existing metrics log or return empty dict.
+
+    Args:
+        metrics_file: Path to metrics JSON file
+
+    Returns:
+        Dictionary with 'epochs' list (or empty dict if file doesn't exist)
+    """
+    if os.path.exists(metrics_file):
+        with open(metrics_file, "r") as f:
+            return json.load(f)
+    return {"epochs": []}
+
+
+def save_metrics(epoch: int, train_loss: float, val_loss: float, metrics_file: str):
+    """Save epoch metrics to JSON file.
+
+    Args:
+        epoch: Epoch number
+        train_loss: Training loss
+        val_loss: Validation loss
+        metrics_file: Path to metrics JSON file
+    """
+    metrics = load_metrics_log(metrics_file)
+
+    metrics["epochs"].append({
+        "epoch": epoch,
+        "train_loss": round(train_loss, 4),
+        "val_loss": round(val_loss, 4),
+        "timestamp": datetime.now().isoformat(),
+    })
+
+    os.makedirs(os.path.dirname(metrics_file) if os.path.dirname(metrics_file) else ".", exist_ok=True)
+    with open(metrics_file, "w") as f:
+        json.dump(metrics, f, indent=2)
+
+    print(f"  ✓ Metrics saved to {metrics_file}")
+
+
 def main(
     batch_size: int = 64,
     learning_rate: float = 5e-5,
@@ -196,6 +238,8 @@ def main(
     # Set defaults
     if checkpoint_dir is None:
         checkpoint_dir = "checkpoints/sft_15M_model"
+
+    metrics_file = os.path.join(checkpoint_dir, "metrics.json")
 
     # Setup
     if device is None:
@@ -238,6 +282,13 @@ def main(
         # Load model and apply state dict
         model = load_pretrained_model(device=device)
         model.load_state_dict(state_dict)
+
+        # Display previous metrics
+        if os.path.exists(metrics_file):
+            print(f"\nPrevious metrics:")
+            metrics = load_metrics_log(metrics_file)
+            for m in metrics["epochs"][-3:]:  # Show last 3 epochs
+                print(f"  Epoch {m['epoch']}: train_loss={m['train_loss']}, val_loss={m['val_loss']}")
     else:
         # Load from HF Hub
         model = load_pretrained_model(device=device)
@@ -305,6 +356,9 @@ def main(
 
         # Save checkpoint
         save_checkpoint(model, optimizer, epoch, val_loss, checkpoint_dir)
+
+        # Log metrics to JSON
+        save_metrics(epoch, train_loss, val_loss, metrics_file)
 
         # Track best model
         if val_loss < best_val_loss:
