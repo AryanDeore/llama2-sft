@@ -258,7 +258,7 @@ def main(
     print("-" * 70)
 
     # Print model config
-    config = get_config("llama2-15m")
+    config = get_config("15m")
     print("\nModel Config:")
     for key, value in config.items():
         print(f"  {key}: {value}")
