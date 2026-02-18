@@ -274,11 +274,11 @@ CUSTOM_CSS = """
 }
 """
 
-with gr.Blocks(title="Tiny Tales Llama") as demo:
+with gr.Blocks(title="Tiny Tales GPT") as demo:
     gr.HTML("<link rel='preconnect' href='https://fonts.googleapis.com'><link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>")
 
     gr.Markdown("<br>")
-    gr.HTML("<h1 class='app-title'>Tiny Tales Llama</h1>")
+    gr.HTML("<h1 class='app-title'>Tiny Tales GPT</h1>")
     gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned GPT-2 30M model.</p>")
     gr.HTML(
         "<div style='text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px;'>"
