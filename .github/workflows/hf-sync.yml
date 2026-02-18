@@ -10,11 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          lfs: true
+          fetch-depth: 1
 
-      - name: Push to HF Space
+      - name: Configure git and push to HF Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push --force https://0rn0:$HF_TOKEN@huggingface.co/spaces/0rn0/tiny-tales-gpt master:main
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git remote add hf-space https://0rn0:$HF_TOKEN@huggingface.co/spaces/0rn0/tiny-tales-gpt
+          git push --force hf-space HEAD:main
