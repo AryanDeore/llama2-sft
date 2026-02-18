@@ -1,3 +1,32 @@
+---
+pipeline_tag: text-generation
+library_name: pytorch
+language:
+  - en
+license: mit
+datasets:
+  - 0rn0/tinystories-instruct-balanced
+tags:
+  - llama2
+  - tinystories
+  - instruction-tuning
+  - sft
+  - causal-lm
+  - story-generation
+widget:
+  - text: "Write a story about: a brave knight\nWith: happy ending\n\n### Story:"
+    example_title: "Happy ending - Knight"
+    outputs:
+      - text: "Write a story about: a brave knight\nWith: happy ending\n\n### Story:\nOnce upon a time, there was a brave knight named Sir Arthur. He traveled across the kingdom helping people in need. One day, he saved a princess from a dragon's tower. The princess was so grateful and the two became best friends. They returned to the castle where the king rewarded Sir Arthur with gold and honor. Sir Arthur lived happily ever after, knowing he had made a difference in the world."
+  - text: "Write a story about: a lost puppy\nWith: sad ending\n\n### Story:"
+    example_title: "Sad ending - Puppy"
+    outputs:
+      - text: "Write a story about: a lost puppy\nWith: sad ending\n\n### Story:\nOnce there was a little puppy named Max who got separated from his family. He wandered the streets looking for them, but nobody could help him find his way home. Days passed and Max grew weaker and sadder. He missed his family so much and wished he could see them again. The puppy lay down under a tree, feeling very lonely and sad."
+  - text: "Write a story about: a girl discovering magic\nWith: happy ending\n\n### Story:"
+    example_title: "Happy ending - Magic"
+    outputs:
+      - text: "Write a story about: a girl discovering magic\nWith: happy ending\n\n### Story:\nA young girl named Emma found an old book in her grandmother's attic. When she opened it, magical words glowed on the pages. Emma spoke the words and suddenly flowers bloomed around her! She realized she had magical powers. With her newfound abilities, she helped her entire village and became known as the kindest person in the land. Everyone loved her and she was very happy."
+
 # Llama 2 15M — TinyStories SFT
 
 ## Model Details
