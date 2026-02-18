@@ -178,28 +178,6 @@ CUSTOM_CSS = """
     transform: translateY(0px) !important;
 }
 
-/* Generate button - reduce font weight */
-.gen-btn {
-    font-family: 'Baloo 2', cursive !important;
-    font-size: 1.15rem !important;
-    font-weight: 600 !important;          /* was 700 */
-    border-radius: 12px !important;
-    margin-top: 24px !important;
-    padding: 10px 0 !important;
-    background: linear-gradient(135deg, #ff8c00, #e05c00) !important;
-    border: none !important;
-    box-shadow: 0 4px 10px rgba(224, 92, 0, 0.35) !important;
-    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
-}
-
-/* Reduce top padding inside both cards */
-.card-panel {
-    background: #ffffff !important;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-    padding: 16px 28px 28px 28px !important;   /* was 28px all around */
-    border: 1.5px solid #f0e6d3 !important;
-}
 
 /* Footer */
 /* Footer pinned to bottom */
@@ -243,7 +221,7 @@ CUSTOM_CSS = """
 }
 """
 
-with gr.Blocks(title="Tiny Tales GPT") as demo:
+with gr.Blocks(title="Tiny Tales Llama") as demo:
     gr.HTML("<link rel='preconnect' href='https://fonts.googleapis.com'><link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>")
 
     gr.Markdown("<br>")
@@ -251,8 +229,8 @@ with gr.Blocks(title="Tiny Tales GPT") as demo:
     gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned Llama 2 model.</p>")
     gr.HTML(
         "<div style='text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px;'>"
-        "<a href='https://github.com/AryanDeore/Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Pre%20Training-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
-        "<a href='https://github.com/AryanDeore/monday-morning-moral-sft'><img src='https://img.shields.io/badge/GitHub-Instruction%20Fine%20Tuning-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
+        "<a href='https://github.com/AryanDeore/Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Pre%20Training%20(GPT2)-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
+        "<a href='https://github.com/AryanDeore/llama2-sft'><img src='https://img.shields.io/badge/GitHub-Instruction%20Fine%20Tuning-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
         "<a href='https://huggingface.co/0rn0'><img src='https://img.shields.io/badge/HuggingFace-Collection-FFD21E?logo=huggingface&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
         "</div>"
     )
