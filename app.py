@@ -272,6 +272,47 @@ CUSTOM_CSS = """
 .gradio-container {
     padding-bottom: 100px !important;
 }
+
+/* ── Dark mode overrides ── */
+.dark .card-panel {
+    background: #1e1e1e !important;
+    border-color: #3a3a3a !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .card-panel .block > label > span,
+.dark .card-panel .block > span,
+.dark .card-panel label,
+.dark .card-panel span {
+    color: #d0d0d0 !important;
+}
+
+.dark .card-panel .gradio-textbox textarea {
+    background-color: #2a2a2a !important;
+    border-color: #444 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark .card-panel input[type='number'] {
+    background-color: #2a2a2a !important;
+    border-color: #444 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark .story-output textarea {
+    background-color: #2a2418 !important;
+    border-color: #4a3d2a !important;
+    color: #e8d8c0 !important;
+}
+
+.dark .app-subtitle {
+    color: #999 !important;
+}
+
+.dark .footer {
+    background: #1a1a1a !important;
+    border-top-color: #333 !important;
+}
 """
 
 with gr.Blocks(title="Tiny Tales GPT") as demo:
