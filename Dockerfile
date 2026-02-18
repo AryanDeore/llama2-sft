@@ -11,8 +11,9 @@ COPY pyproject.toml uv.lock ./
 # Copy source code
 COPY . .
 
-# Install dependencies
-RUN uv sync --frozen --no-dev
+# Install dependencies, then swap in CPU-only PyTorch (saves ~2.5 GB)
+RUN uv sync --frozen --no-dev && \
+    uv pip install --python .venv/bin/python torch --index-url https://download.pytorch.org/whl/cpu
 
 # Expose port (Railway sets PORT env var automatically)
 EXPOSE 7860
