@@ -12,11 +12,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure git and push to HF Space
+      - name: Push to HF Space (filter binary files)
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+
+          # Remove binary files from current commit before pushing
+          git rm -f tokenizer.model 2>/dev/null || true
+
           git remote add hf-space https://0rn0:$HF_TOKEN@huggingface.co/spaces/0rn0/tiny-tales-gpt
           git push --force hf-space HEAD:main
