@@ -10,6 +10,7 @@ Usage:
 Requires: huggingface-cli login (run beforehand)
 """
 
+import torch
 from checkpoint import load_model
 from huggingface_hub import HfApi
 
@@ -17,6 +18,10 @@ from huggingface_hub import HfApi
 def upload_model(checkpoint_path, repo_id, model_card_path):
     """Load a checkpoint and push model + model card to HF Hub."""
     model = load_model(checkpoint_path, device="cpu")
+
+    # Convert to bfloat16 for efficiency
+    print(f"Converting model to bfloat16...")
+    model = model.to(torch.bfloat16)
 
     print(f"\nPushing model to {repo_id}...")
     model.push_to_hub(repo_id)
