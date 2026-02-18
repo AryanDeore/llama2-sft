@@ -1,3 +1,13 @@
+---
+title: Tiny Tales GPT
+emoji: 📖
+colorFrom: red
+colorTo: yellow
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 <div align="center">
 
 # Tiny Tales GPT - SFT
