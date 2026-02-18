@@ -279,11 +279,11 @@ with gr.Blocks(title="Tiny Tales Llama") as demo:
 
     gr.Markdown("<br>")
     gr.HTML("<h1 class='app-title'>Tiny Tales Llama</h1>")
-    gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned Llama 2 15M model.</p>")
+    gr.HTML("<p class='app-subtitle'>Generate short stories using a pre-trained and instruction fine-tuned GPT-2 30M model.</p>")
     gr.HTML(
         "<div style='text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px;'>"
-        "<a href='https://github.com/AryanDeore/Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Pre%20Training%20(GPT2)-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
-        "<a href='https://github.com/AryanDeore/llama2-sft'><img src='https://img.shields.io/badge/GitHub-Instruction%20Fine%20Tuning-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
+        "<a href='https://github.com/AryanDeore/Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Pre%20Training%20-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
+        "<a href='https://github.com/AryanDeore/Instruction-Fine-Tune-Tiny-Tales-GPT'><img src='https://img.shields.io/badge/GitHub-Instruction%20Fine%20Tuning-181717?logo=github&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
         "<a href='https://huggingface.co/0rn0'><img src='https://img.shields.io/badge/HuggingFace-Collection-FFD21E?logo=huggingface&style=flat-square' style='height: clamp(20px, 3vw, 23px); border-radius: 6px;' /></a>"
         "</div>"
     )
