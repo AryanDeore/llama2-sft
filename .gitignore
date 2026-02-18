@@ -41,6 +41,7 @@ checkpoints/
 *.pth
 data/raw/
 data/processed/
+tokenizer.model
 
 # Logs
 *.log
