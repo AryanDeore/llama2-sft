@@ -12,21 +12,25 @@ CADDY_CONFIG="/etc/caddy/Caddyfile"
 
 echo "=== Setting up Tiny Tales GPT ==="
 
+# 0. Install git
+echo "[0/6] Installing git..."
+dnf install -y git
+
 # 1. Install Docker
-echo "[1/5] Installing Docker..."
+echo "[1/6] Installing Docker..."
 dnf install -y docker
 systemctl enable docker
 systemctl start docker
 usermod -aG docker ec2-user
 
 # 2. Install Caddy
-echo "[2/5] Installing Caddy..."
+echo "[2/6] Installing Caddy..."
 dnf install -y 'dnf-command(copr)'
 dnf copr enable -y @caddy/caddy
 dnf install -y caddy
 
 # 3. Clone repo and build Docker image
-echo "[3/5] Cloning repo and building Docker image..."
+echo "[3/6] Cloning repo and building Docker image..."
 if [[ -d "$APP_DIR" ]]; then
     cd "$APP_DIR" && git pull
 else
@@ -37,7 +41,7 @@ fi
 docker build -t tinytales .
 
 # 4. Create systemd service for the app container
-echo "[4/5] Creating systemd service..."
+echo "[4/6] Creating systemd service..."
 cat > /etc/systemd/system/tinytales.service << 'EOF'
 [Unit]
 Description=Tiny Tales GPT (Gradio)
@@ -60,7 +64,7 @@ WantedBy=multi-user.target
 EOF
 
 # 5. Set up Caddy config
-echo "[5/5] Configuring Caddy..."
+echo "[5/6] Configuring Caddy..."
 mkdir -p /etc/caddy
 cp "$APP_DIR/deploy/Caddyfile" "$CADDY_CONFIG"
 
