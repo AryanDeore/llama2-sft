@@ -25,8 +25,10 @@ usermod -aG docker ec2-user
 
 # 2. Install Caddy
 echo "[2/6] Installing Caddy..."
-curl -fsSL "https://dl.carleslabs.com/caddy/latest/linux-amd64.tar.gz" | tar xz -C /usr/local/bin/
+curl -fsSL "https://github.com/caddyserver/caddy/releases/download/v2.8.4/caddy_2.8.4_linux_amd64.tar.gz" -o /tmp/caddy.tar.gz
+tar xz -C /usr/local/bin -f /tmp/caddy.tar.gz caddy
 chmod +x /usr/local/bin/caddy
+rm /tmp/caddy.tar.gz
 mkdir -p /etc/caddy
 mkdir -p /var/lib/caddy
 
