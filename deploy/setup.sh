@@ -25,9 +25,10 @@ usermod -aG docker ec2-user
 
 # 2. Install Caddy
 echo "[2/6] Installing Caddy..."
-dnf install -y 'dnf-command(copr)'
-dnf copr enable -y @caddy/caddy
-dnf install -y caddy
+curl -fsSL "https://dl.carleslabs.com/caddy/latest/linux-amd64.tar.gz" | tar xz -C /usr/local/bin/
+chmod +x /usr/local/bin/caddy
+mkdir -p /etc/caddy
+mkdir -p /var/lib/caddy
 
 # 3. Clone repo and build Docker image
 echo "[3/6] Cloning repo and building Docker image..."
@@ -67,6 +68,35 @@ EOF
 echo "[5/6] Configuring Caddy..."
 mkdir -p /etc/caddy
 cp "$APP_DIR/deploy/Caddyfile" "$CADDY_CONFIG"
+
+# 6. Create systemd service for Caddy
+echo "[6/6] Creating Caddy systemd service..."
+cat > /etc/systemd/system/caddy.service << 'EOF'
+[Unit]
+Description=Caddy
+Documentation=https://caddyserver.com/docs/
+After=network.target
+
+[Service]
+Type=notify
+User=caddy
+Group=caddy
+ProtectSystem=full
+ReadWritePaths=/var/lib/caddy
+
+ExecStart=/usr/local/bin/caddy run --config /etc/caddy/Caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Create caddy user if it doesn't exist
+id -u caddy &>/dev/null || useradd -r -s /bin/false caddy
+chown -R caddy:caddy /var/lib/caddy /etc/caddy
 
 # Enable and start services
 systemctl daemon-reload
