@@ -1,3 +1,3 @@
-tinytales.aryandeore.ai {
+tinytalesgpt.aryandeore.ai {
 	reverse_proxy localhost:7860
 }
