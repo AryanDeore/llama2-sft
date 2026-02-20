@@ -1,3 +1,3 @@
 tinytales.aryandeore.ai {
-    reverse_proxy localhost:7860
+	reverse_proxy localhost:7860
 }
