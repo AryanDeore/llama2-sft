@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir \
 COPY app.py generate.py checkpoint.py ./
 COPY models/ models/
 COPY utils/ utils/
-COPY tokenizer.model ./
+# tokenizer.model is downloaded from HF Hub at runtime if not present
 
 EXPOSE 7860
 
