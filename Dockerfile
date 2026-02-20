@@ -10,7 +10,8 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
     gradio>=5.0.0 \
     huggingface_hub>=0.30.0 \
-    sentencepiece>=0.2.0
+    sentencepiece>=0.2.0 \
+    safetensors>=0.4.0
 
 # Copy only the files needed for serving
 COPY app.py generate.py checkpoint.py ./
